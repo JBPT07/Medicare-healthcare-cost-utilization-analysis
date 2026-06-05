@@ -1,0 +1,29 @@
+# Insights and Reporting
+
+This folder contains the main findings, insights, and reporting materials for the Medicare Healthcare Cost and Utilization Analysis project.
+
+## Purpose
+
+The purpose of this section is to translate the analysis results into clear healthcare business insights and recommendations.
+
+## What This Section Will Include
+
+- Preliminary findings
+- Cost driver analysis
+- Utilization analysis
+- Chronic condition insights
+- Beneficiary population insights
+- Final recommendations
+- Executive summary
+
+## Key Questions to Answer
+
+- Which chronic conditions are associated with the highest total healthcare cost?
+- Which beneficiary groups have the highest utilization?
+- Are costs driven more by claim volume or average claim cost?
+- How do inpatient and outpatient costs compare?
+- What recommendations can be made based on the results?
+
+## Status
+
+In progress.
