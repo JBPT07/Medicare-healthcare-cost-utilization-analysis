@@ -1,0 +1,27 @@
+# Documentation
+
+This folder contains the main project documentation for the Medicare Healthcare Cost and Utilization Analysis project.
+
+## Purpose
+
+The purpose of this documentation is to explain the project objective, business question, data sources, cleaning process, analysis approach, and final conclusions.
+
+## What This Section Will Include
+
+- Project plan
+- Business question
+- Dataset description
+- Data cleaning notes
+- Data profiling summary
+- Table relationship documentation
+- KPI definitions
+- Analysis methodology
+- Final project summary
+
+## Main Business Question
+
+Which Medicare beneficiary populations and chronic conditions are driving the highest healthcare cost and utilization?
+
+## Status
+
+In progress.
