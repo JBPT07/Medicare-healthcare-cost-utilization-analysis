@@ -1,0 +1,24 @@
+# Images
+
+This folder will contain images used in the project documentation and reporting.
+
+## Purpose
+
+The purpose of this folder is to store visual assets that support the project explanation, dashboard presentation, and final reporting.
+
+## Possible Files
+
+- Dashboard screenshots
+- Data model screenshots
+- Power Query transformation screenshots
+- SQL result screenshots
+- Charts used in documentation
+- Final report visuals
+
+## Notes
+
+Images in this folder will be used to make the project easier to understand for recruiters, hiring managers, and other viewers.
+
+## Status
+
+In progress.
