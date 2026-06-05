@@ -1,0 +1,31 @@
+# Data Profiling
+
+This folder contains the data profiling documentation for the Medicare Healthcare Cost and Utilization Analysis project.
+
+## Purpose
+
+The purpose of data profiling is to understand the structure, quality, and business meaning of each dataset before performing cleaning, analysis, and visualization.
+
+## What This Section Will Include
+
+- Dataset overview
+- Number of rows and columns
+- Column descriptions
+- Data types
+- Missing value checks
+- Duplicate checks
+- Primary key and foreign key candidates
+- Date field review
+- Cost field review
+- Chronic condition field review
+- Initial data quality observations
+
+## Datasets to Review
+
+- Beneficiary Summary files
+- Inpatient Claims files
+- Outpatient Claims files
+
+## Status
+
+In progress.
