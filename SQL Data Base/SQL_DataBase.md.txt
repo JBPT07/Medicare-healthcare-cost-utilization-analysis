@@ -1,0 +1,41 @@
+# SQL Database
+
+This folder contains SQL scripts used for database creation, data validation, and healthcare cost/utilization analysis.
+
+## Purpose
+
+The purpose of this section is to organize and document the SQL work used in the project.
+
+SQL will be used to validate the cleaned data, prepare analysis tables, and answer the main business questions.
+
+## What This Section Will Include
+
+- Database creation scripts
+- Table creation scripts
+- Data quality checks
+- Join validation queries
+- Cost analysis queries
+- Utilization analysis queries
+- Chronic condition analysis queries
+- Inpatient vs outpatient comparison queries
+
+## Planned SQL Files
+
+- create_tables.sql
+- data_quality_checks.sql
+- table_relationship_checks.sql
+- cost_analysis.sql
+- utilization_analysis.sql
+- chronic_condition_analysis.sql
+
+## Main Analysis Goals
+
+- Calculate total cost by chronic condition
+- Calculate claim volume by condition
+- Compare inpatient and outpatient utilization
+- Identify high-cost beneficiary populations
+- Determine whether cost is driven by volume or average claim cost
+
+## Status
+
+In progress.
