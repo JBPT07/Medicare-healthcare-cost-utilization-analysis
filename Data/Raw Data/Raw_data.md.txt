@@ -1,0 +1,15 @@
+# Raw Data
+
+This folder is intended to document the original Medicare synthetic data files used in this project.
+
+The raw data files are not uploaded directly to this repository due to file size limitations.
+
+Expected raw files:
+
+- Beneficiary Summary 2008
+- Beneficiary Summary 2009
+- Beneficiary Summary 2010
+- Inpatient Claims 2008-2010
+- Outpatient Claims 2008-2010
+
+The raw data will remain unchanged. All cleaning and transformation steps will be documented separately.
