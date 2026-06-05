@@ -1,0 +1,39 @@
+# Power BI Dashboard
+
+This folder will contain the Power BI dashboard files and dashboard planning documentation for the Medicare Healthcare Cost and Utilization Analysis project.
+
+## Purpose
+
+The purpose of the Power BI dashboard is to visually communicate the main cost and utilization drivers found in the Medicare data.
+
+## Planned Dashboard Sections
+
+- Executive summary page
+- Cost overview
+- Utilization overview
+- Chronic condition analysis
+- Beneficiary population analysis
+- Inpatient vs outpatient comparison
+- Key insights and recommendations
+
+## Planned KPIs
+
+- Total healthcare cost
+- Total claim volume
+- Average cost per claim
+- Total inpatient cost
+- Total outpatient cost
+- Claims by chronic condition
+- Cost by beneficiary demographics
+- Utilization by population group
+
+## Possible Files
+
+- Power BI dashboard file
+- Dashboard screenshots
+- Dashboard layout notes
+- KPI definitions
+
+## Status
+
+In progress.
