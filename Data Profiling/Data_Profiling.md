@@ -81,24 +81,24 @@ The main beneficiary identifier is `DESYNPUF_ID`. This field should be unique wi
 
 ### Demographic Columns
 
-| Table               | Column            | Description | Notes                 |
-| ------------------- | ----------------- | ----------- | --------------------- |
-| Beneficiary Summary | BENE_BIRTH_DT     | Birth date  | Used to calculate age |
-| Beneficiary Summary | BENE_DEATH_DT     | Death date  |                       |
-| Beneficiary Summary | BENE_SEX_IDENT_CD | Sex code    | Needs mapping         |
-| Beneficiary Summary | BENE_RACE_CD      | Race code   | Needs mapping         |
-| Beneficiary Summary | SP_STATE_CODE     | State code  | Needs mapping         |
+| Table               | Column            | Description | Notes                                                                        |
+| ------------------- | ----------------- | ----------- | ---------------------------------------------------------------------------- |
+| Beneficiary Summary | BENE_BIRTH_DT     | Birth date  | Used to calculate age                                                        |
+| Beneficiary Summary | BENE_DEATH_DT     | Death date  | Indicates beneficiary death date; null values represent living beneficiaries |
+| Beneficiary Summary | BENE_SEX_IDENT_CD | Sex code    | Needs mapping                                                                |
+| Beneficiary Summary | BENE_RACE_CD      | Race code   | Needs mapping                                                                |
+| Beneficiary Summary | SP_STATE_CODE     | State code  | Needs mapping                                                                |
 
 ---
 
 ### Date Fields
 
-| Table            | Column             | Description    | Notes                  |
-| ---------------- | ------------------ | -------------- | ---------------------- |
-| Inpatient claims | CLM_FROM_DT        | Start date     | Billing start date     |
-| Inpatient claims | CLM_THRU_DT        | End date       | Billing end date       |
-| Inpatient claims | CLM_ADMSN_DT       | Admission date | Admission tracking     |
-| Inpatient claims | NCH_BENE_DSCHRG_DT | Discharge date | Patient discharge date |
+| Table                           | Column             | Description    | Notes                  |
+| ------------------------------- | ------------------ | -------------- | ---------------------- |
+| Inpatient and outpatient claims | CLM_FROM_DT        | Start date     | Billing start date     |
+| Inpatient and outpatient claims | CLM_THRU_DT        | End date       | Billing end date       |
+| Inpatient claims                | CLM_ADMSN_DT       | Admission date | Admission tracking     |
+| Inpatient claims                | NCH_BENE_DSCHRG_DT | Discharge date | Patient discharge date |
 
 ---
 
