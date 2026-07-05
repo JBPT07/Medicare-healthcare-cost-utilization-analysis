@@ -21,6 +21,8 @@ The following standards were consistently applied across all datasets:
 - Unified data types across all datasets  
 - Removal of duplicate records based on unique identifiers  
 - Creation of analytical features (age groups, risk flags, year)  
+- Removal of non-analytical columns to reduce dataset complexity and improve performance  
+- Removal of non-cost-related fields not contributing to insurance expenditure analysis  
 - No records were deleted without documented justification  
 - All transformations were documented for auditability and reproducibility  
 
@@ -41,14 +43,14 @@ Column names were standardized to ensure consistency across all datasets and ena
 
 ### Column Renaming Mapping
 
-| Original Name           | Renamed To                |
-|-------------------------|---------------------------|
+| Original Name            | Renamed To                  |
+|-------------------------|----------------------------|
 | DESYNPUF_ID             | Beneficiary_ID            |
 | BENE_BIRTH_DT           | Birthdate                 |
 | BENE_DEATH_DT           | Deathdate                 |
 | BENE_SEX_IDENT_CD       | Gender                    |
 | BENE_RACE_CD            | Race                      |
-| SP_STATE_CODE           | Beneficiary_State_CD      |
+| SP_STATE_CODE           | Beneficiary_State_CD     |
 | BENE_ESRD_IND           | ESRD                      |
 | SP_ALZHDMTA             | Alzheimer_Indicator       |
 | SP_CHF                  | CHF_Indicator             |
@@ -63,6 +65,47 @@ Column names were standardized to ensure consistency across all datasets and ena
 | SP_STRKETIA             | TIA_Indicator             |
 | MEDREIMB_IP             | Inpatient_Reimbursement   |
 | MEDREIMB_OP             | Outpatient_Reimbursement  |
+
+---
+
+## Column Selection (Feature Reduction)
+
+During the data cleaning phase, several columns were removed based on data profiling results and business requirements.
+
+The objective was to reduce noise, improve performance, and focus only on variables relevant to healthcare cost and utilization analysis.
+
+### Columns Removed (Not Used in Analysis)
+
+#### Physician-Level Identifiers (Excluded)
+- AT_PHYSN_NPI  
+- OP_PHYSN_NPI  
+- OT_PHYSN_NPI  
+
+These fields were excluded because physician-level attribution is outside the scope of this analysis.
+
+---
+
+### Cost Scope Filtering (Insurance Expenditure Focus)
+
+In addition to non-analytical fields, any columns that did not represent **insurance cost or healthcare expenditure** were excluded from the analytical model.
+
+This ensures that the dataset is strictly aligned with the project objective:  
+**analysis of Medicare cost and utilization patterns.**
+
+#### Fields excluded due to non-cost relevance:
+- Administrative or reference-only identifiers not linked to billing
+- Redundant metadata fields with no monetary or utilization impact
+- Non-financial indicators outside reimbursement or claim payment structure
+
+---
+
+### Rationale for Removal
+
+- Not used in joins or relational modeling  
+- Not required for KPIs (cost per patient, utilization, reimbursement analysis)  
+- Outside scope of insurance expenditure analysis  
+- Improved performance in SQL and Power BI models  
+- Reduced model complexity and memory usage  
 
 ---
 
@@ -99,84 +142,82 @@ A new column `Year` was added prior to append to preserve temporal context.
 
 ## D. Feature Engineering
 
-The following features were created to support segmentation and cost/utilization analysis:
-
-| Feature                | Description                                                  | Business Purpose                                 |
-|------------------------|--------------------------------------------------------------|--------------------------------------------------|
-| age_group              | Groups beneficiaries into Medicare-relevant age bands        | Analyze cost/utilization by age segment          |
-| chronic_condition_count| Counts total chronic conditions per beneficiary              | Measure disease burden intensity                 |
-| high_risk_flag         | Flags beneficiaries meeting high-risk criteria               | Identify high-cost / high-utilization patients   |
+| Feature                  | Description                                           | Business Purpose                          |
+|-------------------------|-------------------------------------------------------|------------------------------------------|
+| age_group              | Age segmentation of beneficiaries                     | Cost and utilization analysis            |
+| chronic_condition_count| Number of chronic conditions per beneficiary          | Measure disease burden                   |
+| high_risk_flag         | High-risk population indicator                        | Identify high-cost beneficiaries        |
 
 ---
 
 ## E. Data Quality Checks
 
-This phase validates accuracy, consistency, and analytical readiness of the dataset.
-
 ---
 
 ### 1. Duplicate Records
-- No unexpected duplicates were identified using primary keys (Beneficiary_ID, Claim_ID where applicable)
+- No unexpected duplicates found using primary identifiers  
 
 ---
 
 ### 2. Missing Values
-- No critical missing values were found in key analytical fields  
-- Non-critical nulls were retained when business-valid (e.g., Deathdate for living beneficiaries)
+- No critical missing values identified  
+- Non-critical nulls retained where appropriate  
 
 ---
 
 ### 3. Data Types
-- All variables were validated and confirmed to have correct data types for SQL and Power BI usage  
+- All fields validated for SQL and Power BI compatibility  
 
 ---
 
 ### 4. Value Consistency
-- All categorical mappings were validated after transformation  
-- No inconsistencies detected across years  
+- All categorical mappings validated after transformation  
 
 ---
 
 ### 5. Feature Validation
-- All engineered features (age_group, chronic_condition_count, high_risk_flag) were validated against business rules and confirmed correct  
+- All engineered features validated against business rules  
 
 ---
 
 ## Data Quality Issues Identified
 
-### 1. Data Issue: Negative Reimbursement Values
+---
 
-- Negative values were identified in:
+### 1. Negative Reimbursement Values
+
+**Issue:**
+- Negative values found in:
   - Inpatient_Reimbursement  
   - Outpatient_Reimbursement  
 
-**Treatment Applied:**
-- Negative values were replaced with `0` to avoid distortion in cost and utilization metrics  
-- A data quality flag was created to track adjusted records for future traceability  
+**Resolution:**
+- Negative values were replaced with 0  
+- A data quality flag was created for traceability  
 
 ---
 
-### 2. Outlier Issue: Age Calculation
+### 2. Age Outliers
 
 **Issue:**
-- Initial age values exceeded plausible human limits due to incorrect calculation using current date instead of dataset observation year  
+- Unrealistic age values due to incorrect calculation using current date  
 
 **Resolution:**
-- Age was recalculated using the corresponding dataset year (2008–2010)  
-- All implausible values were corrected  
-- No remaining unrealistic age values after adjustment  
+- Age recalculated using dataset observation year (2008–2010)  
+- All outliers corrected  
 
 ---
 
-# Final Assessment
+## Final Assessment
 
-After completing all transformations and data quality validations:
+After completing cleaning and validation:
 
 - Dataset is consistent across all years  
-- All key analytical fields are standardized  
+- Schema is standardized  
 - Feature engineering is validated  
-- Known data issues have been resolved or documented  
+- Cost scope filtering is applied  
+- Known data issues documented and resolved  
 
-## Conclusion
+### Conclusion
 
-The Beneficiary dataset is **approved and ready for SQL analysis and Power BI dashboard development**.
+The Beneficiary dataset is approved and ready for SQL analysis and Power BI dashboard development.
