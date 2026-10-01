@@ -65,7 +65,7 @@ These patterns support further profiling and segmentation. They do not establish
 ### Finding
 
 | Care Setting | Claims | Share of Claims | Total Payments | Share of Payments |
-|---|---:|---:|---:|---:|
+|---|---|---|---|---|
 | Inpatient | 66,637 | 7.88% | $636,770,480 | 75.26% |
 | Outpatient | 779,533 | 92.12% | $209,292,350 | 24.74% |
 
