@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="Medicare_Database_2.0.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure pragmas browser query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="4066"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="Beneficiary_Table" custom_title="0" dock_id="1" table="4,17:mainBeneficiary_Table"/><dock_state state="000000ff00000000fd00000001000000020000043b000002aefc0100000001fb000000160064006f0063006b00420072006f007700730065003101000000000000043b0000013900ffffff0000043b0000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="Beneficiary_Table" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="171"/><column index="2" value="132"/><column index="3" value="85"/><column index="4" value="66"/><column index="5" value="48"/><column index="6" value="70"/><column index="7" value="163"/><column index="8" value="97"/><column index="9" value="122"/><column index="10" value="89"/><column index="11" value="90"/><column index="12" value="105"/><column index="13" value="98"/><column index="14" value="128"/><column index="15" value="115"/><column index="16" value="89"/><column index="17" value="138"/><column index="18" value="143"/><column index="19" value="86"/><column index="20" value="155"/><column index="21" value="163"/><column index="22" value="39"/><column index="23" value="29"/><column index="24" value="70"/><column index="25" value="150"/><column index="26" value="95"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="Claim_Cost_Inpatient/Outpatient*">--Outpatient and inpatient claims cost comparison
+
+SELECT 
+	Claim_Type, 
+	count(Claim_ID) as Total_Claims, 
+	SUM(Claim_Payment_Amount) as Total_Cost,
+	Round(AVG(Claim_Payment_Amount),2) as Average_Cost,
+	round(sum(Claim_Payment_Amount) * 100.0 / SUM(SUM(Claim_Payment_Amount)) OVER(),2) as Percentage_Cost,
+	round(count(Claim_ID) * 100.0 / (Select count(claim_ID) from Claims_Table), 2) as volume_percent
+FROM Claims_Table
+GROUP BY Claim_Type</sql><sql name="Trend_By_Year">SELECT 
+	strftime('%Y', Claim_Start_Date) as Year,
+	sum(Claim_Payment_Amount) as Total_Cost,
+	count(Claim_ID) as Total_Claims,
+	round(avg(Claim_Payment_Amount)) as Average_Cost
+FROM Claims_Table
+GROUP BY Year
+
+
+	
+</sql><sql name="Top_Beneficiaries_Cost">SELECT 
+	b.Beneficiary_ID, 
+	count(c.Claim_ID) as total_Claims,
+	sum(c.Claim_Payment_Amount) as total_Cost,
+	round(avg(c.Claim_Payment_Amount)) as average_Cost,
+	b.Age_Group,
+	b.Chronic_Condition_Count
+FROM Beneficiary_Table b
+JOIN Claims_Table c
+ON b.Beneficiary_Year_ID = c.Beneficiary_Year_ID
+GROUP BY b.Beneficiary_Year_ID
+ORDER BY total_Cost DESC
+limit 20
+
+</sql><sql name="TotalCost_Vs_TopBeneficiariesCost">--The top 20 beneficiaries cost is less than 1% of the total cost
+
+WITH Top_20 as(SELECT 
+	b.Beneficiary_ID, 
+	count(c.Claim_ID) as total_Claims,
+	sum(c.Claim_Payment_Amount) as total_Cost,
+	round(avg(c.Claim_Payment_Amount),2) as average_Cost,
+	b.Age_Group,
+	b.Chronic_Condition_Count
+FROM Beneficiary_Table b
+JOIN Claims_Table c
+ON b.Beneficiary_Year_ID = c.Beneficiary_Year_ID
+GROUP BY b.Beneficiary_Year_ID
+ORDER BY total_Cost DESC
+limit 20)
+
+SELECT 
+	sum(total_Cost) as Top_20_Cost,
+	(SELECT sum(Claim_Payment_Amount) FROM Claims_Table) as Total_Cost, 
+	round(sum(total_Cost) * 100 / (SELECT sum(Claim_Payment_Amount) FROM Claims_Table),2) as Top_20_Percentage
+From Top_20
+
+</sql><sql name="Top_Providers_Cost">SELECT 
+	Provider_ID,
+	sum(Claim_Payment_Amount) as total_cost,
+	count(Claim_ID) as total_Claims,
+	round(avg(Claim_Payment_Amount)) as average_Cost
+FROM Claims_Table
+GROUP by Provider_ID
+ORDER BY total_Cost DESC
+limit 20</sql><sql name="Concentration_Claims_Cost">SELECT
+    CASE
+        WHEN Claim_Payment_Amount &lt; 1000 THEN '&lt; $1K'
+        WHEN Claim_Payment_Amount &lt; 5000 THEN '$1K - $5K'
+        WHEN Claim_Payment_Amount &lt; 10000 THEN '$5K - $10K'
+        WHEN Claim_Payment_Amount &lt; 50000 THEN '$10K - $50K'
+        ELSE '$50K+'
+    END AS cost_range,
+    COUNT(*) AS claim_count,
+    SUM(Claim_Payment_Amount) AS total_cost,
+	SUM(Claim_Payment_Amount) * 100 / SUM(SUM(Claim_Payment_Amount)) OVER() as percent,
+	count(*) * 100 / sum(count(*)) over() as represents
+FROM Claims_Table
+GROUP BY cost_range
+ORDER BY total_cost DESC;</sql><sql name="Concentration_Beneficiary_Cost">WITH beneficiary_cost AS (
+    SELECT
+        Beneficiary_ID,
+        SUM(Claim_Payment_Amount) AS total_cost
+    FROM Claims_Table
+	GROUP BY Beneficiary_ID
+),
+
+ranked_beneficiaries AS (
+    SELECT
+        Beneficiary_ID,
+        total_cost,
+        ROW_NUMBER() OVER (ORDER BY total_cost DESC) AS ranking,
+		COUNT(*) OVER () AS total_beneficiaries
+    FROM beneficiary_cost
+)
+
+SELECT
+    SUM(total_cost) AS cost_top_10_percent,
+    round(SUM(total_cost) * 100.0 / (SELECT SUM(total_cost) FROM beneficiary_cost)) AS percent_of_total_cost
+FROM ranked_beneficiaries
+WHERE ranking &lt;= total_beneficiaries * 0.1;</sql><current_tab id="0"/></tab_sql></sqlb_project>
